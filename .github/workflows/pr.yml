@@ -1,0 +1,20 @@
+name: Build & Deploy Documentation
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Run Sphinx documentation build
+        uses: ammaraskar/sphinx-action@0.4
+        with:
+          docs-folder: "docs/"
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: _build/html/
