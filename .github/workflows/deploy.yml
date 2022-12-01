@@ -25,7 +25,7 @@ jobs:
         with:
           docs-folder: "./"
       - name: Upload documentation artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-pages-artifact@v1
         with:
           path: _build/html/
   deploy:
