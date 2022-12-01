@@ -14,10 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: main
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
@@ -30,8 +27,15 @@ jobs:
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v3
         with:
-          name: documentation
           path: _build/html/
+  deploy:
+    name: Deploy Documentation
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: main
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
