@@ -1,6 +1,6 @@
 ### Environment Types
 
-Warden currently supports three environment types. These types are passed to `env-init` when configuring a project for local development for the first time. This list of environment types can also be seen by running `warden env-init --help` on your command line. The `docker-compose` configuration used to assemble each environment type can be found in the [environments directory](https://github.com/davidalger/warden/tree/master/environments) on Github.
+Warden currently supports three environment types. These types are passed to `env-init` when configuring a project for local development for the first time. This list of environment types can also be seen by running `warden env-init --help` on your command line. The `docker-compose` configuration used to assemble each environment type can be found in the [environments directory](https://github.com/wardenenv/warden/tree/main/environments) on Github.
 
 #### Local
 
@@ -94,4 +94,4 @@ The configuration of each environment leverages a `base` configuration YAML file
 
 ### Environment Templates
 
-There is a [Github Template available for Magento 2](https://github.com/davidalger/warden-env-magento2) allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.
+There is a [Github Template available for Magento 2](https://github.com/wardenenv/warden-env-magento2) allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.

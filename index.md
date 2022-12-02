@@ -35,5 +35,5 @@ Under the hood `docker-compose` is used to control everything which Warden runs 
 
     changelog
     images
-    Github Project <https://github.com/davidalger/warden>
+    Github Project <https://github.com/wardenenv/warden>
 ```
