@@ -24,7 +24,7 @@ Warden may be installed by cloning the repository to the directory of your choic
 
     sudo mkdir /opt/warden
     sudo chown $(whoami) /opt/warden
-    git clone -b master https://github.com/wardenenv/warden.git /opt/warden
+    git clone -b main https://github.com/wardenenv/warden.git /opt/warden
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
     PATH="/opt/warden/bin:$PATH"
     warden svc up
