@@ -2,16 +2,16 @@
 
 The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden svc up` as part of the installation procedure.
 
-```{note}
+:::{note}
     In addition to the below manual process, there is a `Github Template available for Magento 2 <https://github.com/wardenenv/warden-env-magento2>`_ allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.
-```
+:::
 
-1.  Create a new directory on your host machine at the location of your choice and then jump into the new directory to get started:
+1. Create a new directory on your host machine at the location of your choice and then jump into the new directory to get started:
 
         mkdir -p ~/Sites/exampleproject
         cd ~/Sites/exampleproject
 
-2.  From the root of your new project directory, run `env-init` to create the `.env` file with configuration needed for Warden and Docker to work with the project.
+2. From the root of your new project directory, run `env-init` to create the `.env` file with configuration needed for Warden and Docker to work with the project.
 
         warden env-init exampleproject magento2
 
@@ -56,35 +56,35 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         BLACKFIRE_SERVER_ID=
         BLACKFIRE_SERVER_TOKEN=
 
-3.  Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
+3. Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
 
         warden sign-certificate exampleproject.test
 
-4.  Next you'll want to start the project environment:
+4. Next you'll want to start the project environment:
 
         warden env up
 
-    ```{warning}
+    :::{warning}
         If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
-    ```
+    :::
 
-5.  Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
+5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
 
         warden shell
 
-6.  Configure global Magento Marketplace credentials
+6. Configure global Magento Marketplace credentials
 
-    	composer global config http-basic.repo.magento.com <username> <password>
+        composer global config http-basic.repo.magento.com <username> <password>
 
-    ```{note}
+    :::{note}
         To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
 
         If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
 
         Use the **Public key** as your username and the **Private key** as your password.
-    ```
+    :::
 
-7.  Initialize project source files using composer create-project and then move them into place:
+7. Initialize project source files using composer create-project and then move them into place:
 
         META_PACKAGE=magento/project-community-edition META_VERSION=2.4.x
 
@@ -94,7 +94,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         rsync -a /tmp/exampleproject/ /var/www/html/
         rm -rf /tmp/exampleproject/
 
-8.  Install the application and you should be all set:
+8. Install the application and you should be all set:
 
         ## Install Application
         bin/magento setup:install \
@@ -154,60 +154,60 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         bin/magento indexer:reindex
         bin/magento cache:flush
 
-    ```{note}
+    :::{note}
         Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
 
-        .. code::
-
+        ```bash
             bin/magento config:set --lock-env catalog/search/engine elasticsearch7
             bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
             bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
             bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
             bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
             bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
-    ```
+        ```
+    :::
 
-9.  Generate an admin user and configure 2FA for OTP
+10. Generate an admin user and configure 2FA for OTP
 
-        ## Generate localadmin user
-        ADMIN_PASS="$(pwgen -n1 16)"
-        ADMIN_USER=localadmin
+         ## Generate localadmin user
+         ADMIN_PASS="$(pwgen -n1 16)"
+         ADMIN_USER=localadmin
 
-        bin/magento admin:user:create \
-            --admin-password="${ADMIN_PASS}" \
-            --admin-user="${ADMIN_USER}" \
-            --admin-firstname="Local" \
-            --admin-lastname="Admin" \
-            --admin-email="${ADMIN_USER}@example.com"
-        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+         bin/magento admin:user:create \
+             --admin-password="${ADMIN_PASS}" \
+             --admin-user="${ADMIN_USER}" \
+             --admin-firstname="Local" \
+             --admin-lastname="Admin" \
+             --admin-email="${ADMIN_USER}@example.com"
+         printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
 
-        ## Configure 2FA provider
-        OTPAUTH_QRI=
-        TFA_SECRET=$(python -c "import base64; print base64.b32encode('$(pwgen -A1 128)')" | sed 's/=*$//')
-        OTPAUTH_URL=$(printf "otpauth://totp/%s%%3Alocaladmin%%40example.com?issuer=%s&secret=%s" \
-            "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TFA_SECRET}"
-        )
+         ## Configure 2FA provider
+         OTPAUTH_QRI=
+         TFA_SECRET=$(python -c "import base64; print base64.b32encode('$(pwgen -A1 128)')" | sed 's/=*$//')
+         OTPAUTH_URL=$(printf "otpauth://totp/%s%%3Alocaladmin%%40example.com?issuer=%s&secret=%s" \
+             "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TFA_SECRET}"
+         )
 
-        bin/magento config:set --lock-env twofactorauth/general/force_providers google
-        bin/magento security:tfa:google:set-secret "${ADMIN_USER}" "${TFA_SECRET}"
+         bin/magento config:set --lock-env twofactorauth/general/force_providers google
+         bin/magento security:tfa:google:set-secret "${ADMIN_USER}" "${TFA_SECRET}"
 
-        printf "%s\n\n" "${OTPAUTH_URL}"
-        printf "2FA Authenticator Codes:\n%s\n" "$(oathtool -s 30 -w 10 --totp --base32 "${TFA_SECRET}")"
+         printf "%s\n\n" "${OTPAUTH_URL}"
+         printf "2FA Authenticator Codes:\n%s\n" "$(oathtool -s 30 -w 10 --totp --base32 "${TFA_SECRET}")"
 
-        segno "${OTPAUTH_URL}" -s 4 -o "pub/media/${ADMIN_USER}-totp-qr.png"
-        printf "%s\n\n" "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/media/${ADMIN_USER}-totp-qr.png?t=$(date +%s)"
+         segno "${OTPAUTH_URL}" -s 4 -o "pub/media/${ADMIN_USER}-totp-qr.png"
+         printf "%s\n\n" "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/media/${ADMIN_USER}-totp-qr.png?t=$(date +%s)"
 
-    ```{note}
-        Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from `the Mailhog service <https://mailhog.warden.test/>`_.
-    ```
+     :::{note}
+         Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from `the Mailhog service <https://mailhog.warden.test/>`_.
+     :::
 
-10. Launch the application in your browser:
+11. Launch the application in your browser:
 
     - [https://app.exampleproject.test/](https://app.exampleproject.test/)
     - [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
     - [https://rabbitmq.exampleproject.test/](https://rabbitmq.exampleproject.test/)
     - [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
 
-```{note}
+:::{note}
     To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
-```
+:::
