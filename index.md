@@ -1,9 +1,11 @@
 Welcome to Warden's documentation!
 ==================================
 
-``` include:: ../README.md
-    :start-line: 1
-    :end-before: <!-- include_open_stop -->
+```{include} ../README.md
+---
+start-line: 1
+end-before: <!-- include_open_stop -->
+---
 ```
 
 Under the hood `docker-compose` is used to control everything which Warden runs (shared services as well as per-project containers) via the Docker Engine.
@@ -18,22 +20,26 @@ Under the hood `docker-compose` is used to control everything which Warden runs 
 * Full support for Magento 1, Magento 2, Laravel, Symfony 4, Shopware 6 on both macOS and Linux.
 * Ability to override, extend, or setup completely custom environment definitions on a per-project basis.
 
-``` toctree::
-    :maxdepth: 2
-    :caption: Getting Started
+```{toctree}
+---
+maxdepth: 2
+caption: Getting Started
+---
 
-    installing
-    services
-    usage
-    environments
-    configuration
+installing
+services
+usage
+environments
+configuration
 ```
 
-``` toctree::
-    :maxdepth: 1
-    :caption: About Warden
+```{toctree}
+---
+maxdepth: 1
+caption: About Warden
+---
 
-    changelog
-    images
-    Github Project <https://github.com/wardenenv/warden>
+changelog
+images
+Github Project <https://github.com/wardenenv/warden>
 ```

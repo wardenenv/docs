@@ -1,8 +1,8 @@
-## LiveReload Setup
+# LiveReload Setup
 
 LiveReload routing is currently supported only on the `magento2` environment type. Other environment types may utilize LiveReload via per-project compose configurations to setup the routing for LiveReload JS and WebSocket endpoints.
 
-### Configuration for Magento 2
+## Configuration for Magento 2
 
 Magento 2 bundles an example grunt based server-side compilation workflow which includes LiveReload and it works within the Warden shell environment. In order to use this:
 
@@ -29,7 +29,7 @@ Magento 2 bundles an example grunt based server-side compilation workflow which 
    ];
    ```
 
-   ``` note::
+   ```{note}
        This can be accomplished via alternative means, the important part is the browser requesting ``/livereload.js?port=443`` when running the site on your local development environment.
    ```
 
@@ -51,7 +51,7 @@ Magento 2 bundles an example grunt based server-side compilation workflow which 
    grunt watch
    ```
 
-   ``` note::
+   ```{note}
        Grunt should be used within the php-fpm container entered via ``warden shell``
    ```
 

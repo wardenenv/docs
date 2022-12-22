@@ -1,4 +1,4 @@
-## Installing Magento 2
+# Installing Magento 2
 
 The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden svc up` as part of the installation procedure.
 

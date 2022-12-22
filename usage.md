@@ -1,6 +1,6 @@
-## Warden Usage
+# Warden Usage
 
-### Common Commands
+## Common Commands
 
 Launch a shell session within the project environment's `php-fpm` container:
 
@@ -50,6 +50,6 @@ Remove volumes completely:
 
     warden env down -v
 
-### Further Information
+## Further Information
 
 Run `warden help` and `warden env -h` for more details and useful command information.

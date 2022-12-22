@@ -1,4 +1,4 @@
-## Magento Functional Testing Framework
+# Magento Functional Testing Framework
 
 For information what **Magento Functional Testing Framework** is - please follow to [MFTF DevDocs](https://devdocs.magento.com/mftf/docs/introduction.html).
 
@@ -15,11 +15,11 @@ SELENIUM_HOST=selenium
 BROWSER=chrome
 ```
 
-### Running Tests
+## Running Tests
 
-We provide complex instruction on [How to run MFTF Tests](magento2-testing.html#running-mftf-tests) in Warden environment.
+We provide complex instruction on {ref}`How to run MFTF Tests <magento2-testing-running-mftf-tests>` in Warden environment.
 
-### Debugging MFTF Tests
+## Debugging MFTF Tests
 
 By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and update environment containers (`warden env up`)
 
@@ -31,15 +31,15 @@ WARDEN_SELENIUM_DEBUG=1
 
 To preview the process of testing, you need any **VLC** client that provides **SSH Tunnel** support (eg. [Remmina](https://remmina.org/how-to-install-remmina/)). To preview the process of testing, you need to use `tunnel.warden.test:2222` (login: `user`):
 
-### Remote Desktop Viewer
+## Remote Desktop Viewer
 
   ![Remote Desktop Viewer](screenshots/selenium-remote-desktop-viewer.png)
 
-### Remmina
+## Remmina
 
   ![Remmina Configuration](screenshots/remmina-ssh-tunnel.png)
 
-### Mac OS X
+## Mac OS X
 
 To preview the process in Mac OS X, you must first create an SSH tunnel to the docker instance hosting the VNC server.  That would look something like:
 
