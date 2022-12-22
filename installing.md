@@ -56,7 +56,7 @@ GUI tools for Windows should use the network paths provided by WSL2: `\\wsl$\Ubu
 On Linux environments, you will need to configure your DNS to resolve `*.test` to `127.0.0.1` or use `/etc/hosts` entries. On Mac OS this configuration is automatic via the BSD per-TLD resolver configuration found at `/etc/resolver/test`. On Windows manual configuration of the network adapter DNS server is required.
 
 
-For more information see the configuration page for [Automatic DNS Resolution](configuration/dns-resolver.html)
+For more information see the configuration page for {doc}`Automatic DNS Resolution <configuration/dns-resolver>
 
 ### Trusted CA Root Certificate
 
