@@ -3,7 +3,7 @@
 The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden svc up` as part of the installation procedure.
 
 :::{note}
-    In addition to the below manual process, there is a `Github Template available for Magento 2 <https://github.com/wardenenv/warden-env-magento2>`_ allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.
+In addition to the below manual process, there is a `Github Template available for Magento 2 <https://github.com/wardenenv/warden-env-magento2>`_ allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.
 :::
 
 1. Create a new directory on your host machine at the location of your choice and then jump into the new directory to get started:
@@ -65,7 +65,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         warden env up
 
     :::{warning}
-        If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
+    If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
     :::
 
 5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
@@ -77,11 +77,11 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         composer global config http-basic.repo.magento.com <username> <password>
 
     :::{note}
-        To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
+    To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
 
-        If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
+    If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
 
-        Use the **Public key** as your username and the **Private key** as your password.
+    Use the **Public key** as your username and the **Private key** as your password.
     :::
 
 7. Initialize project source files using composer create-project and then move them into place:
@@ -155,16 +155,16 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         bin/magento cache:flush
 
     :::{note}
-        Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
+    Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
 
-        ```bash
-            bin/magento config:set --lock-env catalog/search/engine elasticsearch7
-            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
-            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
-            bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
-            bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
-            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
-        ```
+    ```bash
+        bin/magento config:set --lock-env catalog/search/engine elasticsearch7
+        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
+        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
+        bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
+        bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
+        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
+    ```
     :::
 
 10. Generate an admin user and configure 2FA for OTP
@@ -198,7 +198,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
          printf "%s\n\n" "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/media/${ADMIN_USER}-totp-qr.png?t=$(date +%s)"
 
      :::{note}
-         Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from `the Mailhog service <https://mailhog.warden.test/>`_.
+     Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from `the Mailhog service <https://mailhog.warden.test/>`_.
      :::
 
 11. Launch the application in your browser:
@@ -209,5 +209,5 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
     - [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
 
 :::{note}
-    To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
+To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
 :::

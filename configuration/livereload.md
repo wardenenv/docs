@@ -30,10 +30,10 @@ Magento 2 bundles an example grunt based server-side compilation workflow which 
    ```
 
    :::{note}
-       This can be accomplished via alternative means, the important part is the browser requesting ``/livereload.js?port=443`` when running the site on your local development environment.
+   This can be accomplished via alternative means, the important part is the browser requesting ``/livereload.js?port=443`` when running the site on your local development environment.
    :::
 
-5. Run `bin/magento app:config:import` to load merged configuration into the application.
+6. Run `bin/magento app:config:import` to load merged configuration into the application.
 
 **With the above configuration in place**, you'll first enter the FPM container via `warden shell` and then setup as follows:
 

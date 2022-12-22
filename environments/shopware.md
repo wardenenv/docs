@@ -52,7 +52,7 @@ The below example demonstrates the from-scratch setup of the Shopware 6 applicat
         warden env up
 
     :::{warning}
-        If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
+    If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
     :::
 
 7.  Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
@@ -73,9 +73,9 @@ The below example demonstrates the from-scratch setup of the Shopware 6 applicat
     - [https://app.exampleproject.test/admin/](https://app.exampleproject.test/admin/)
 
 :::{note}
-    The default username for Shopware 6 is ``admin`` with password ``shopware``.
+The default username for Shopware 6 is ``admin`` with password ``shopware``.
 :::
 
 :::{note}
-    To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
+To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
 :::
