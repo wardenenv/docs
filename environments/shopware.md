@@ -51,7 +51,7 @@ The below example demonstrates the from-scratch setup of the Shopware 6 applicat
 
         warden env up
 
-    ```warning::
+    ```{warning}
         If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up`` again.
     ```
 
@@ -72,10 +72,10 @@ The below example demonstrates the from-scratch setup of the Shopware 6 applicat
     - [https://app.exampleproject.test/](https://app.exampleproject.test/)
     - [https://app.exampleproject.test/admin/](https://app.exampleproject.test/admin/)
 
-```note::
+```{note}
     The default username for Shopware 6 is ``admin`` with password ``shopware``.
 ```
 
-```note::
+```{note}
     To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
 ```
