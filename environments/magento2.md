@@ -17,30 +17,26 @@ In addition to the below manual process, there is a `Github Template available f
 
     The result of this command is a `.env` file in the project root (tip: commit this to your VCS to share the configuration with other team members) having the following contents:
 
-        WARDEN_ENV_NAME=exampleproject
-        WARDEN_ENV_TYPE=magento2
-        WARDEN_WEB_ROOT=/
-
-        TRAEFIK_DOMAIN=exampleproject.test
-        TRAEFIK_SUBDOMAIN=app
-
         WARDEN_DB=1
-        WARDEN_ELASTICSEARCH=1
+        WARDEN_ELASTICSEARCH=0
+        WARDEN_OPENSEARCH=1
+        WARDEN_ELASTICHQ=0
         WARDEN_VARNISH=1
         WARDEN_RABBITMQ=1
         WARDEN_REDIS=1
 
-        WARDEN_SYNC_IGNORE=
-
-        ELASTICSEARCH_VERSION=7.6
-        MARIADB_VERSION=10.3
+        OPENSEARCH_VERSION=2.5
+        DB_DISTRIBUTION=mariadb
+        DB_DISTRIBUTION_VERSION=10.6
         NODE_VERSION=12
-        COMPOSER_VERSION=1
-        PHP_VERSION=7.3
+        COMPOSER_VERSION=2.2
+        PHP_VERSION=8.1
         PHP_XDEBUG_3=1
-        RABBITMQ_VERSION=3.8
-        REDIS_VERSION=5.0
-        VARNISH_VERSION=6.0
+        RABBITMQ_VERSION=3.9
+        REDIS_VERSION=7.0
+        VARNISH_VERSION=7.1
+
+        WARDEN_SYNC_IGNORE=
 
         WARDEN_ALLURE=0
         WARDEN_SELENIUM=0
@@ -96,10 +92,6 @@ In addition to the below manual process, there is a `Github Template available f
 
 8. Install the application and you should be all set:
 
-    :::{note}
-    If you are using OpenSearch instead of ElasticSearch, use `--elasticsearch-host=opensearch` instead of `--elasticsearch-host=elasticsearch`.
-    :::
-
         ## Install Application
         bin/magento setup:install \
             --backend-frontname=backend \
@@ -111,12 +103,12 @@ In addition to the below manual process, there is a `Github Template available f
             --db-name=magento \
             --db-user=magento \
             --db-password=magento \
-            --search-engine=elasticsearch7 \
-            --elasticsearch-host=elasticsearch \
-            --elasticsearch-port=9200 \
-            --elasticsearch-index-prefix=magento2 \
-            --elasticsearch-enable-auth=0 \
-            --elasticsearch-timeout=15 \
+            --search-engine=opensearch \
+            --opensearch-host=opensearch \
+            --opensearch-port=9200 \
+            --opensearch-index-prefix=magento2 \
+            --opensearch-enable-auth=0 \
+            --opensearch-timeout=15 \
             --http-cache-hosts=varnish:80 \
             --session-save=redis \
             --session-save-redis-host=redis \
@@ -157,19 +149,6 @@ In addition to the below manual process, there is a `Github Template available f
 
         bin/magento indexer:reindex
         bin/magento cache:flush
-
-    :::{note}
-    Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
-
-    ```bash
-        bin/magento config:set --lock-env catalog/search/engine elasticsearch7
-        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
-        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
-        bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
-        bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
-        bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
-    ```
-    :::
 
 10. Generate an admin user and configure 2FA for OTP
 
