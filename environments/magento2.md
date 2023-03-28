@@ -17,6 +17,13 @@ In addition to the below manual process, there is a `Github Template available f
 
     The result of this command is a `.env` file in the project root (tip: commit this to your VCS to share the configuration with other team members) having the following contents:
 
+        WARDEN_ENV_NAME=exampleproject
+        WARDEN_ENV_TYPE=magento2
+        WARDEN_WEB_ROOT=/
+
+        TRAEFIK_DOMAIN=exampleproject.test
+        TRAEFIK_SUBDOMAIN=app
+
         WARDEN_DB=1
         WARDEN_ELASTICSEARCH=0
         WARDEN_OPENSEARCH=1
