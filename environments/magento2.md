@@ -33,8 +33,8 @@ In addition to the below manual process, there is a `Github Template available f
         WARDEN_REDIS=1
 
         OPENSEARCH_VERSION=2.5
-        DB_DISTRIBUTION=mariadb
-        DB_DISTRIBUTION_VERSION=10.6
+        MYSQL_DISTRIBUTION=mariadb
+        MYSQL_DISTRIBUTION_VERSION=10.6
         NODE_VERSION=12
         COMPOSER_VERSION=2.2
         PHP_VERSION=8.1
