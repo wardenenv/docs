@@ -63,11 +63,15 @@ The below example demonstrates the from-scratch setup of the Shopware 6 applicat
 
         echo $'const:\n  APP_URL: "https://app.exampleproject.test"\n' > .psh.yaml.override
 
-9.  Install the Shopware application complete with sample data:
+9.  Update any packages in `./dev-ops/analyze` that may be out of date:
+
+        composer update --working-dir=./dev-ops/analyze
+
+10.  Install the Shopware application complete with sample data:
 
         ./psh.phar install
 
-10. Launch the application in your browser:
+11. Launch the application in your browser:
 
     - [https://app.exampleproject.test/](https://app.exampleproject.test/)
     - [https://app.exampleproject.test/admin/](https://app.exampleproject.test/admin/)
