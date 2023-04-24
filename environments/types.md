@@ -10,6 +10,27 @@ When this type is used, a `.warden/warden-env.yml` may be placed in the root dir
 
 Similar to the other environment type's base definitions, Warden supports a `warden-env.darwin.yml` and `warden-env.linux.yml`
 
+## Drupal
+
+The `drupal` environment type supports development of Drupal projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MariaDB
+
+In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `web/sites/default/files` and `web/sites/default/private` which remain mounted using a delegated mount.
+
+## Laravel
+
+The `laravel` environment type supports development of Laravel projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MariaDB
+* Redis
+
+Files are currently mounted using a delegated mount on macOS and natively on Linux.
+
 ## Magento 2
 
 The `magento2` environment type provides necessary containerized services for running Magento 2 in a local development context including:
@@ -35,16 +56,19 @@ The `magento1` environment type supports development of Magento 1 projects, laun
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
 
-## Laravel
+## Shopware
 
-The `laravel` environment type supports development of Laravel projects, launching containers including:
+The `shopware` environment type supports development of Shopware 6 projects, launching containers including:
 
 * Nginx
 * PHP-FPM
 * MariaDB
 * Redis
+* RabbitMQ (disabled by default)
+* Varnish (disabled by default)
+* Elasticsearch (disabled by default)
 
-Files are currently mounted using a delegated mount on macOS and natively on Linux.
+In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `public/media` which remains mounted using a delegated mount.
 
 ## Symfony
 
@@ -59,20 +83,6 @@ The `symfony` environment type supports development of Symfony 4+ projects, laun
 * Elasticsearch (disabled by default)
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
-
-## Shopware
-
-The `shopware` environment type supports development of Shopware 6 projects, launching containers including:
-
-* Nginx
-* PHP-FPM
-* MariaDB
-* Redis
-* RabbitMQ (disabled by default)
-* Varnish (disabled by default)
-* Elasticsearch (disabled by default)
-
-In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `public/media` which remains mounted using a delegated mount.
 
 ## WordPress
 
