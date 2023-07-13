@@ -65,4 +65,15 @@ In the above examples you can replace ``1.1.1.1`` and ``1.0.0.1`` (CloudFlare) w
 
 Add the local dnsmasq resolver as the first DNS server:
 
+#### Windows 10
 ![Windows DNS Configuration](screenshots/123906280-8a09c400-d97c-11eb-9558-cb513f89e4c3.png)
+
+#### Windows 11
+Open the Network & Internet control panel
+![Windows 11 Network Control Panel](screenshots/dns-resolver--win11-network-internet-panel.png)
+
+Select the correct network interface for your device (ethernet, wifi, etc.), then click the "Edit" button on the line for "DNS Server Assignment"
+![Windows 11 DNS Server Assignment tab](screenshots/dns-resolver--win11-ethernet-settings.png)
+
+Specify ``127.0.0.1`` as the primary DNS host and any public DNS server as the backup (e.g. ``1.1.1.1`` for Cloudflare, ``9.9.9.9`` for Quad9)
+![Windows 11 DNS Configuration](screenshots/dns-resolver--win11-interface-dns-settings.png)
