@@ -215,7 +215,7 @@ All the necessary files are located in `dev/tests/api-functional/`.
     - Admin credentials `TESTS_WEBSERVICE_USER` and `TESTS_WEBSERVICE_APIKEY` (it's formally **password**)<br>
       _The Admin account should exist, it will be created only if `TESTS_MAGENTO_INSTALLATION` is enabled_
 
-1. Configure your Magento Installation using `etc/install-config-mysql.php.dist` as a template. The arguments are exactly the same to those you use for `bin/magento setup:install`:
+1. Configure your Magento Installation using `config/install-config-mysql.php.dist` as a template. The arguments are exactly the same to those you use for `bin/magento setup:install`:
 
     ```php
    return [
@@ -260,7 +260,7 @@ All the necessary files are located in `dev/tests/api-functional/`.
    ];
    ```
 
-1. You need to create `etc/config-global.php` based on `config-global.php.dist`. This is your container for Config data - for example: Configuration of Elasticsearch connection!
+1. You need to create `config/config-global.php` based on `config-global.php.dist`. This is your container for Config data - for example: Configuration of Elasticsearch connection!
 
     ```php
     return [
