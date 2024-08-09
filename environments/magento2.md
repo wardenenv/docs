@@ -32,16 +32,16 @@ In addition to the below manual process, there is a `Github Template available f
         WARDEN_RABBITMQ=1
         WARDEN_REDIS=1
 
-        OPENSEARCH_VERSION=2.5
+        OPENSEARCH_VERSION=2.12
         MYSQL_DISTRIBUTION=mariadb
         MYSQL_DISTRIBUTION_VERSION=10.6
-        NODE_VERSION=12
-        COMPOSER_VERSION=2.2
-        PHP_VERSION=8.1
+        NODE_VERSION=20
+        COMPOSER_VERSION=2
+        PHP_VERSION=8.3
         PHP_XDEBUG_3=1
-        RABBITMQ_VERSION=3.9
-        REDIS_VERSION=7.0
-        VARNISH_VERSION=7.1
+        RABBITMQ_VERSION=3.13
+        REDIS_VERSION=7.2
+        VARNISH_VERSION=7.5
 
         WARDEN_SYNC_IGNORE=
 
@@ -53,6 +53,8 @@ In addition to the below manual process, there is a `Github Template available f
         WARDEN_SPLIT_CHECKOUT=0
         WARDEN_TEST_DB=0
         WARDEN_MAGEPACK=0
+
+        MAGEPACK_VERSION=2.11
 
         BLACKFIRE_CLIENT_ID=
         BLACKFIRE_CLIENT_TOKEN=
