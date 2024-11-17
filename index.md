@@ -1,13 +1,6 @@
 Welcome to Warden's documentation!
 ==================================
 
-```{include} ../README.md
----
-start-line: 1
-end-before: <!-- include_open_stop -->
----
-```
-
 Under the hood `docker-compose` is used to control everything which Warden runs (shared services as well as per-project containers) via the Docker Engine.
 
 ## Features
