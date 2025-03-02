@@ -82,7 +82,8 @@ In addition to the below manual process, there is a `Github Template available f
         composer global config http-basic.repo.magento.com <username> <password>
 
     :::{note}
-    To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
+    To locate or generate a new set of composer credentials for Adobe Commerce (Magento 2) you will need an Adobe Commerce Marketplace account,
+    instructions on the Adobe site: [Get your authentication keys](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/prerequisites/authentication-keys).
 
     If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
 
