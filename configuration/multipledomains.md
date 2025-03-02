@@ -116,7 +116,7 @@ When multiple domains are being used to load different stores or websites on Mag
     ```
 
     :::{note}
-    This is similar to using `magento-vars.php` on Magento Commerce Cloud, but using composer to load the file rather than relying on Commerce Cloud magic: https://devdocs.magento.com/guides/v2.3/cloud/project/project-multi-sites.html
+    This is similar to using `magento-vars.php` on Magento Commerce Cloud, but using composer to load the file rather than relying on Commerce Cloud magic: https://experienceleague.adobe.com/en/docs/commerce-on-cloud/user-guide/configure-store/multiple-sites
     :::
 
 3. After editing the `composer.json` regenerate the auto load configuration:
