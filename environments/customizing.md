@@ -77,7 +77,13 @@ The `.modman` folder and the corresponding `.basedir` file will be recognized an
 
 ## Magento 2 Specific Customizations
 
-The following variables can be added to the project's `.env` file to enable additional database containers for use with the Magento 2 (Commerce Only) [split-database solution](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html).
+:::{note}
+
+The split database feature has been deprecated as of Adobe Commerce 2.4.2 and is not supported on Adobe Commerce cloud infrastructure.
+
+::::
+
+The following variables can be added to the project's `.env` file to enable additional database containers for use with the Magento 2 (Commerce Only) [split-database solution](https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/storage/split-db/multi-master).
 
   * `WARDEN_SPLIT_SALES=1`
   * `WARDEN_SPLIT_CHECKOUT=1`
