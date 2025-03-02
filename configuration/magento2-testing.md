@@ -52,7 +52,7 @@ If you have {doc}`configured Xdebug <xdebug>`, run Unit tests inside **Debug** c
 $ grunt spec:<THEME>
 ```
 
-For more specific jasmine unit test instructions, see the Magento DevDocs ([Magento 2.4](https://devdocs.magento.com/guides/v2.4/test/js/jasmine.html))
+For more specific jasmine unit test instructions, see the Magento DevDocs ([Magento 2.4](https://developer.adobe.com/commerce/testing/guide/js/))
 
 ### Troubleshooting
 
@@ -312,7 +312,7 @@ To run Acceptance tests you need to {doc}`configure the MFTF environment <mftf>`
    ELASTICSEARCH_VERSION=7
    SELENIUM_HOST=selenium
    ```
-   More details can be found [in Magento DevDocs](https://devdocs.magento.com/mftf/docs/configuration.html).
+   More details can be found [in Magento DevDocs](https://developer.adobe.com/commerce/testing/functional-testing-framework/configuration/).
 
 ### Execution
 
