@@ -1,5 +1,8 @@
 # Change Log
 
+## UNRELEASED
+* Add documentation about running vite in Warden for Laravel ([wardenenv/warden#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
+
 ## Version [0.14.1](https://github.com/wardenenv/warden/tree/0.14.1) (2023-07-10)
 [All Commits](https://github.com/wardenenv/warden/compoare/0.14.0..0.14.1)
 
