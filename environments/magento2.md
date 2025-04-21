@@ -192,6 +192,34 @@ In addition to the below manual process, there is a `Github Template available f
          segno "${OTPAUTH_URL}" -s 4 -o "pub/media/${ADMIN_USER}-totp-qr.png"
          printf "%s\n\n" "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/media/${ADMIN_USER}-totp-qr.png?t=$(date +%s)"
 
+     :::{warning}
+     **Adobe Commerce 2.4.8 core issue with ``--lock-env``**
+
+     Until [this core issue](https://github.com/magento/magento2/issues/39836) is addressed, the following command will result in a broken (unable to run ``bin/magento`` and ``mr`` commands) environment:    
+     ``bin/magento config:set --lock-env twofactorauth/general/force_providers google``
+
+     The issue is due to the ``DuoSecurity`` 2FA Provider improperly reading the ``force-providers`` value from ``env.php``. 
+
+     The workaround is to, after running the command, manually adjust the following content in ``env.php``:
+     ````
+     'twofactorauth' => [
+       'general' => [
+         'force_providers' => [
+           'google'
+         ]
+       ]
+     ]
+     ````
+     with:
+     ````
+     'twofactorauth' => [
+       'general' => [
+         'force_providers' => 'google'
+       ]
+     ]
+     ````
+     :::
+
      :::{note}
      Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from `the Mailhog service <https://mailhog.warden.test/>`_.
      :::
