@@ -34,15 +34,17 @@ Flush varnish:
 
      warden env exec -T varnish varnishadm 'ban req.url ~ .' 
 
-Connect to redis:
+Connect to redis/valkey:
 
     warden redis
+    warden valkey
 
-Flush redis completely:
+Flush redis/valkey completely:
 
     warden redis flushall
+    warden valkey flushall
 
-Run redis continous stat mode
+Run redis continuous stat mode
 
     warden redis --stat
 
