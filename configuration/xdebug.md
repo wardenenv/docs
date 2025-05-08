@@ -56,3 +56,32 @@ When it receives the first request, PHP Storm should prompt you if the "Server" 
 Additional configurations may be required, such as configuring ``DBGp Proxy`` port.
 
 ![clnt-docker-xdebug-additional-config](screenshots/phpstorm-additional-xdebug-configs.png)
+
+## Xdebug and extensions (ionCube, SourceGuardian)
+
+ionCube and SourceGuardian extensions are disabled by default in the Xdebug image.
+
+As described in the Xdebug compatibility page: [Xdebug Supported Versions and Compatibility](https://xdebug.org/docs/compat#compat)
+
+> Xdebug does not work together with other extensions that deal with PHP's internals. This is due to compatibility problems with those modules.
+
+Known issues including errors and / or segfaults may occur when these extensions are enabled with Xdebug.
+
+If you do wish to try running them together you can enable ionCube and/or SourceGuardian within the php-debug container 
+by creating the following overrides within your project and restarting the debug container.
+
+```
+./.warden/warden-env.yml
+services:
+    php-debug:
+        volumes:
+        - ./.warden/php.d/01-ioncube-loader.ini:/etc/php.d/01-ioncube-loader.ini
+        - ./.warden/php.d/15-sourceguardian.ini:/etc/php.d/15-sourceguardian.ini
+        
+./.warden/php.d/01-ioncube-loader.ini
+zend_extension=ioncube_loader.so;
+
+./.warden/php.d/15-sourceguardian.ini:
+extension=sourceguardian.so
+
+```
