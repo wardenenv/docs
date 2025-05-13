@@ -61,6 +61,15 @@ In addition to the below manual process, there is a `Github Template available f
         BLACKFIRE_SERVER_ID=
         BLACKFIRE_SERVER_TOKEN=
 
+    :::{note}
+    Starting with Magento 2.4.8, set:
+
+        WARDEN_REDIS=0
+        WARDEN_VALKEY=1
+        VALKEY_VERSION=8.1
+
+    :::
+
 3. Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
 
         warden sign-certificate exampleproject.test
@@ -101,6 +110,10 @@ In addition to the below manual process, there is a `Github Template available f
         rm -rf /tmp/exampleproject/
 
 8. Install the application and you should be all set:
+
+    :::{note}
+    Please note that if using Valkey instead of Redis, the value of the session and cache flags will be different
+    :::
 
         ## Install Application
         bin/magento setup:install \
