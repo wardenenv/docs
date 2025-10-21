@@ -69,5 +69,5 @@ On Ubuntu/Debian this CA root is copied into `/usr/local/share/ca-certificates` 
 :::{note}
 If you are using **Firefox** and it warns you the SSL certificate is invalid/untrusted, go to Preferences -> Privacy & Security -> View Certificates (bottom of page) -> Authorities -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
 
-If you are using **Chrome** on **Linux** and it warns you the SSL certificate is invalid/untrusted, go to Chrome Settings -> Privacy And Security -> Manage Certificates (see more) -> Authorities -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
+If you are using **Chrome** or **Chromium** on **Linux** and it warns you the SSL certificate is invalid/untrusted, go to Chrome Settings -> Privacy And Security -> Security -> Manage Certificates -> Local Certificates -> Custom -> Installed By You -> Trusted Certificates -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
 :::
