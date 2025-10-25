@@ -32,7 +32,9 @@ You should see a SPX report printed after the command finishes. And there will a
 
 ### Web
 
-Once an environment is started with the `WARDEN_PHP_SPX=1` flag set, all web requests will be profiled. To override this, you can uncheck the `Automatic start` option within the control panel. 
+Once an environment is started with the `WARDEN_PHP_SPX=1` the SPX control panel will be available. 
+
+You can start profiling requests, either by enabling the `Enabled` checkbox within the Control Panel. Or by setting the `SPX_ENABLED` browser cookie to a value of `1`
 
 ![Example Web Report generated with PHP SPX](screenshots/phpspx-web-report.png)
 
