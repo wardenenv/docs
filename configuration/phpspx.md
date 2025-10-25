@@ -13,6 +13,13 @@ To enable PHP SPX in your project environment, add to your `.env` file:
 WARDEN_PHP_SPX=1
 ```
 
+:::{note}
+When disabling SPX, you may be presented with a 502 bad gateway when the environment is next restarted, or the SPX container is removed.
+
+This is caused due to the SPX cookies still being set in your browser. There is a helper tool to aid in removing these on the 502 page, or you can remove them manually through developer tools.
+:::
+
+
 ## Usage
 
 ### CLI
