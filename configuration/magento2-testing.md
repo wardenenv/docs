@@ -77,6 +77,10 @@ All the necessary files are located in `dev/tests/integration/`:
     
 2. You need to create `etc/install-config-mysql.php` based on `etc/install-config-mysql.php.dist` as a template. The arguments are exactly the same to those you use for `bin/magento setup:install`:
 
+   :::{note}
+   Please note the below values for cache and session may be different if using Valkey instead of Redis
+   :::
+
     ```php
    return [
        'db-host' => 'tmp-mysql',

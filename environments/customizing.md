@@ -11,6 +11,7 @@ The versions of MariaDB, Elasticsearch, Varnish, Redis, NodeJS and Composer may 
   * `MARIADB_VERSION`
   * `ELASTICSEARCH_VERSION`
   * `REDIS_VERSION`
+  * `VALKEY_VERSION`
   * `VARNISH_VERSION`
   * `RABBITMQ_VERSION`
   * `NODE_VERSION`
@@ -20,6 +21,7 @@ Start of some environments could be skipped by using variables in `.env` file:
 
   * `WARDEN_DB=0`
   * `WARDEN_REDIS=0`
+  * `WARDEN_VALKEY=0`
 
 ## Docker Specific Customizations
 To override default docker settings, add a custom configuration file in your project root
