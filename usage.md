@@ -50,6 +50,13 @@ Remove volumes completely:
 
     warden env down -v
 
+Warden troubleshooting and debug information
+
+    warden doctor
+
+    # Verbose mode also print environment variables along with debug and configuration information.
+    warden doctor -v
+
 ## Further Information
 
 Run `warden help` and `warden env -h` for more details and useful command information.
