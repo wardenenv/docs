@@ -1,6 +1,6 @@
 # Customizing An Environment
 
-Further information on customizing or extending an environment is forthcoming. For now, this section is limited to very simple and somewhat common customizations.
+## Version Customization via `.env`
 
 To configure your project with a non-default PHP version, add the following to the project's `.env` file and run `warden env up` to re-create the affected containers:
 
@@ -23,18 +23,60 @@ Start of some environments could be skipped by using variables in `.env` file:
   * `WARDEN_REDIS=0`
   * `WARDEN_VALKEY=0`
 
-## Docker Specific Customizations
-To override default docker settings, add a custom configuration file in your project root
-folder: `/.warden/warden-env.yml`
-This file will be merged with the default environment configuration.
-One example for a use case is [the setup of multiple domains](https://docs.warden.dev/configuration/multipledomains.html?highlight=warden%20env%20yml#multiple-domains).
+## Docker Compose Overrides
+
+For customizations beyond `.env` variables, Warden supports per-project Docker Compose override files. Create a `.warden/warden-env.yml` file in your project root to override or extend the default service configuration.
+
+This file is a standard Docker Compose YAML partial. Warden loads it **after** all built-in service definitions, giving it the highest merge precedence — any service, volume, label, or environment variable defined here will override the defaults.
+
+:::{tip}
+Preview the fully merged Docker Compose configuration at any time with:
+
+    warden env config
+:::
+
+### OS-Specific Overrides
+
+In addition to `.warden/warden-env.yml`, Warden also loads OS-specific override files if they exist:
+
+  * `.warden/warden-env.darwin.yml` — applied only on **macOS**
+  * `.warden/warden-env.linux.yml` — applied only on **Linux**
+
+This is useful for platform-specific volume mount options or performance tuning.
+
+### Custom Docker Image
+
+To use a custom PHP-FPM image (e.g., with pre-installed extensions or from a private registry):
+
+```yaml
+services:
+  php-fpm:
+    image: my-registry/custom-php:8.3
+  php-debug:
+    image: my-registry/custom-php:8.3-debug
+```
+
+### Adding Extra Services
+
+You can add services not included by default. For example, to add Adminer with Traefik routing:
+
+```yaml
+services:
+  adminer:
+    image: adminer:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-adminer.rule=Host(`adminer.${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.${WARDEN_ENV_NAME}-adminer.tls=true
+```
+
+After adding this and running `warden env up -d`, Adminer will be accessible at `https://adminer.<project>.test`.
 
 ## PHP Specific Customizations
-To override default php settings, follow the docker customization above and include your custom `php.ini` file.
-In this case the `warden-env.yml` should look like this:
 
-```
-version: "3.5"
+To override default PHP settings, mount a custom `php.ini` file via `.warden/warden-env.yml`:
+
+```yaml
 services:
   php-fpm:
     volumes:
@@ -43,14 +85,18 @@ services:
     volumes:
       - ./.warden/php/zz-config.ini:/etc/php.d/zz-config.ini
 ```
+
 Now add the referenced `.warden/php/zz-config.ini` file with your wanted changes.
 For example you could change the error reporting value:
-```
+
+```ini
 error_reporting=(E_ALL ^ E_DEPRECATED)
 ```
+
 The config file will be merged with the default `01-php.ini` resp. override the values
 included there. The default values are the following:
-```
+
+```ini
 date.timezone = UTC
 max_execution_time = 3600
 max_input_vars = 10000
@@ -60,22 +106,51 @@ post_max_size = 25M
 session.auto_start = Off
 upload_max_filesize = 25M
 ```
+
 ## Nginx Specific Customizations
-To override the default nginx configuration of your project, add a new file 
-`.warden/warden-env.yml` to your project root with the following content:
-```
-version: "3.5"
+
+To override the default nginx configuration of your project, add the following to `.warden/warden-env.yml`:
+
+```yaml
 services:
   nginx:
     volumes:
       - ./.warden/nginx/custom.conf:/etc/nginx/default.d/custom.conf
 ```
+
 There you can specify a custom Nginx configuration which will be included following the `.conf` files within the `/etc/nginx/available.d` directory: `include /etc/nginx/default.d/*.conf`
+
+## Advanced: Project-Level Environment Partials
+
+Beyond `.warden/warden-env.yml`, Warden supports a more granular override mechanism through project-level environment partial directories. For each service partial (e.g., `php-fpm`, `nginx`, `db`), Warden searches the following locations in order:
+
+  1. Built-in includes: `<warden>/environments/includes/`
+  2. Built-in type-specific: `<warden>/environments/<env-type>/`
+  3. User home includes: `~/.warden/environments/includes/`
+  4. User home type-specific: `~/.warden/environments/<env-type>/`
+  5. **Project includes: `.warden/environments/includes/`**
+  6. **Project type-specific: `.warden/environments/<env-type>/`**
+
+Files at each location use suffixes: `.base.yml` (all platforms), `.darwin.yml` (macOS), `.linux.yml` (Linux).
+
+For example, to override just the `php-fpm` partial for a Magento 2 project, create:
+
+    .warden/environments/includes/php-fpm.base.yml
+
+This is loaded in addition to (and after) the built-in `php-fpm.base.yml`, so Docker Compose merge semantics apply.
+
+:::{note}
+The `.warden/warden-env.yml` file is still loaded **after** all partials, so it always has the final say.
+:::
+
+## Multiple Domains
+
+For configuring multiple top-level domains, see [Multiple Domains](../configuration/multipledomains.md).
 
 ## Magento 1 Specific Customizations
 
-If you use a `modman` structure, initialize the environment in your project path. 
-The `.modman` folder and the corresponding `.basedir` file will be recognized and set up automatically. 
+If you use a `modman` structure, initialize the environment in your project path.
+The `.modman` folder and the corresponding `.basedir` file will be recognized and set up automatically.
 
 ## Magento 2 Specific Customizations
 
