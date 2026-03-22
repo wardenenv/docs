@@ -10,6 +10,7 @@ Under the hood `docker-compose` is used to control everything which Warden runs 
 * Dnsmasq to serve DNS responses for `.test` domains eliminating manual editing of `/etc/hosts`
 * An SSH tunnel for connecting from Sequel Pro or TablePlus into any one of multiple running database containers.
 * Warden issued wildcard SSL certificates for running https on all local development domains.
+* Cloudflare Tunnel integration for exposing local environments to the public internet.
 * Full support for Magento 1, Magento 2, Laravel, Symfony 4, Shopware 6 on both macOS and Linux.
 * Ability to override, extend, or setup completely custom environment definitions on a per-project basis.
 
