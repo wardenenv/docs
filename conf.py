@@ -23,6 +23,7 @@ extensions = [
   'sphinx_rtd_theme',
   'sphinx_copybutton',
   'sphinx_markdown_tables',
+  'sphinxcontrib.mermaid',
 ]
 
 source_suffix = ['.rst', '.md']
@@ -34,7 +35,7 @@ author = 'David Alger'
 version = ''
 release = ''
 
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '.venv']
 
 html_theme = "sphinx_rtd_theme"
 html_show_sourcelink = False
