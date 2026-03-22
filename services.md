@@ -6,6 +6,7 @@ After running `warden svc up` for the first time following installation, the fol
 * [https://portainer.warden.test/](https://portainer.warden.test/)
 * [https://dnsmasq.warden.test/](https://dnsmasq.warden.test/)
 * [https://mailhog.warden.test/](https://mailhog.warden.test/)
+* `tunnel.warden.test` (SSH tunnel on port `2222` for connecting database clients — see [Database Connections](https://docs.warden.dev/configuration/database.html))
 
 ## Customizable Settings
 
