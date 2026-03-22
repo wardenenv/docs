@@ -72,6 +72,49 @@ services:
 ```
 There you can specify a custom Nginx configuration which will be included following the `.conf` files within the `/etc/nginx/available.d` directory: `include /etc/nginx/default.d/*.conf`
 
+## Custom Commands
+
+Warden supports adding custom commands at both the project and global level. Each custom command consists of two files:
+
+  * `<name>.cmd` — the bash script that runs when you execute `warden <name>`
+  * `<name>.help` — the help text displayed in `warden help` output (required for the command to appear in the help listing)
+
+### Command locations
+
+  * **Project-level:** `<project>/.warden/commands/` — available only within that project
+  * **Global:** `~/.warden/commands/` — available in all projects
+
+When a command name exists in multiple locations, the resolution order is: project → global → built-in. This means project commands can override global ones, and both can override built-in commands.
+
+### Example
+
+Create a project command that clears all Magento caches:
+
+`.warden/commands/flush.cmd`:
+```bash
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+warden env exec -T php-fpm bin/magento cache:flush
+```
+
+`.warden/commands/flush.help`:
+```bash
+#!/usr/bin/env bash
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  flush
+
+\033[33mDescription:\033[0m
+  Flush all Magento caches
+EOF
+)
+```
+
+Then run it with `warden flush`.
+
+For a real-world example, see the [Magento 2 environment template](https://github.com/wardenenv/warden-env-magento2/tree/develop/.warden/commands).
+
 ## Magento 1 Specific Customizations
 
 If you use a `modman` structure, initialize the environment in your project path. 
