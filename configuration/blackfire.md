@@ -34,8 +34,8 @@ For a full walkthrough, see [Profiling HTTP Requests with a Browser](https://doc
 
 ### Chrome limitation
 
-Chrome's Manifest V3 restricts extensions from modifying outgoing request headers, which breaks the **Profile all requests** feature. This means Chrome can only profile the initial page load — it cannot capture follow-up POST requests, Ajax calls, or API requests within a session.
-
-Single-page profiling (clicking **Profile** on a specific URL) still works normally in Chrome.
+:::{warning}
+Chrome's Manifest V3 restricts extensions from modifying outgoing request headers, which breaks the **Profile all requests** feature. Chrome can only profile the initial page load — it cannot capture follow-up POST requests, Ajax calls, or API requests within a session. Single-page profiling still works normally.
 
 If your workflow relies on profiling all requests in a session, **use Firefox** where this feature remains fully supported. For more details, see [Announcing changes to the "Profile all requests" feature on Chrome](https://blog.blackfire.io/announcing-changes-to-the-profile-all-requests-feature-on-chrome.html) on the Blackfire blog.
+:::
