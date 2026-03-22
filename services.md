@@ -5,7 +5,7 @@ After running `warden svc up` for the first time following installation, the fol
 * [https://traefik.warden.test/](https://traefik.warden.test/)
 * [https://portainer.warden.test/](https://portainer.warden.test/)
 * [https://dnsmasq.warden.test/](https://dnsmasq.warden.test/)
-* [https://mailhog.warden.test/](https://mailhog.warden.test/)
+* [https://webmail.warden.test/](https://webmail.warden.test/)
 
 ## Customizable Settings
 
