@@ -6,9 +6,8 @@ To configure your project with a non-default PHP version, add the following to t
 
     PHP_VERSION=7.2
 
-The versions of MariaDB, Elasticsearch, Varnish, Redis, NodeJS and Composer may also be similarly configured using variables in the `.env` file:
+The versions of Elasticsearch, Varnish, Redis, NodeJS and Composer may also be similarly configured using variables in the `.env` file:
 
-  * `MARIADB_VERSION`
   * `ELASTICSEARCH_VERSION`
   * `REDIS_VERSION`
   * `VALKEY_VERSION`
@@ -16,6 +15,33 @@ The versions of MariaDB, Elasticsearch, Varnish, Redis, NodeJS and Composer may 
   * `RABBITMQ_VERSION`
   * `NODE_VERSION`
   * `COMPOSER_VERSION`
+
+## Database
+
+Warden supports both **MariaDB** (default) and **MySQL** as the database engine. The distribution and version are controlled via two environment variables in your project's `.env` file:
+
+  * `MYSQL_DISTRIBUTION` — set to `mariadb` (default) or `mysql`
+  * `MYSQL_DISTRIBUTION_VERSION` — the image tag/version to use
+
+For example, to use MariaDB 11.4:
+
+    MYSQL_DISTRIBUTION=mariadb
+    MYSQL_DISTRIBUTION_VERSION=11.4
+
+To use MySQL 8.4 instead:
+
+    MYSQL_DISTRIBUTION=mysql
+    MYSQL_DISTRIBUTION_VERSION=8.4
+
+:::{note}
+Drupal and CakePHP environments use `DB_DISTRIBUTION` and `DB_DISTRIBUTION_VERSION` instead of the `MYSQL_` prefix. The values and behavior are the same.
+:::
+
+After changing the database distribution or version, run `warden env up` to re-create the database container.
+
+:::{warning}
+Switching distributions (e.g. from MariaDB to MySQL) is **not** a drop-in replacement for existing data volumes. If you change the distribution on an existing environment, you should export your database first, remove the db volume (`warden env down -v`), and re-import after the new container is running.
+:::
 
 Start of some environments could be skipped by using variables in `.env` file:
 
