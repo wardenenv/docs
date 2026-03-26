@@ -3,7 +3,9 @@
 ## UNRELEASED
 [All Commits](https://github.com/wardenenv/warden/compare/0.16.0..main)
 
-_No changes yet_
+**Bug Fixes:**
+* `warden install` now automatically trusts the Warden root CA in the Windows CurrentUser Root store when run inside WSL, so Windows browsers can trust local Warden certificates without manual certificate import
+* Expanded Windows / WSL DNS documentation to cover Windows 11 cases where Hyper-V firewall rules prevent DNS resolution from reaching Warden, including `hosts` file and Chrome `--host-resolver-rules` workarounds
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 

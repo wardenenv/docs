@@ -77,3 +77,18 @@ Select the correct network interface for your device (ethernet, wifi, etc.), the
 
 Specify ``127.0.0.1`` as the primary DNS host and any public DNS server as the backup (e.g. ``1.1.1.1`` for Cloudflare, ``9.9.9.9`` for Quad9)
 ![Windows 11 DNS Configuration](screenshots/dns-resolver--win11-interface-dns-settings.png)
+
+:::{warning}
+On some newer Windows 11 systems using WSL2 and Docker Desktop, Hyper-V firewall rules may still prevent Windows DNS requests from reaching Warden's local `dnsmasq` service even after `127.0.0.1` is configured as the primary DNS server.
+:::
+
+If Windows DNS still does not resolve your Warden domains, use one of these workarounds:
+
+1. Add the required domains to the Windows `hosts` file at `C:\Windows\System32\drivers\etc\hosts`.
+2. Launch Chrome with host resolver overrides for local development domains:
+
+```text
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --host-resolver-rules="MAP *.test 127.0.0.1, MAP test 127.0.0.1, MAP *.local 127.0.0.1, MAP local 127.0.0.1"
+```
+
+The Chrome workaround only affects that browser process. Other Windows applications and browsers will still need working DNS resolution or matching `hosts` file entries.
