@@ -96,7 +96,7 @@ Files are currently mounted using a delegated mount on macOS and natively on Lin
 
 ## Commonalities
 
-In addition to the above, each environment type (with the exception of the `local` type) come with PHP setup to use `mhsendmail` to ensure outbound email does not inadvertently leave your network and to support simpler testing of email functionality. Mailhog may be accessed by navigating to [https://mailhog.warden.test/](https://mailhog.warden.test/) in a browser.
+In addition to the above, each environment type (with the exception of the `local` type) come with PHP setup to use `mhsendmail` to ensure outbound email does not inadvertently leave your network and to support simpler testing of email functionality. The webmail interface may be accessed by navigating to [https://webmail.warden.test/](https://webmail.warden.test/) in a browser.
 
 Where PHP is specified in the above list, there should be two `fpm` containers, `php-fpm` and `php-debug` in order to provide Xdebug support. Use of Xdebug is enabled by setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container. Shell sessions opened in the debug container via `warden debug` will also connect PHP process for commands on the CLI to Xdebug.
 
