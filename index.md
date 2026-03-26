@@ -20,6 +20,7 @@ caption: Getting Started
 ---
 
 installing
+architecture
 services
 usage
 environments
