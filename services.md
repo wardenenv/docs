@@ -7,6 +7,7 @@ After running `warden svc up` for the first time following installation, the fol
 * [https://dnsmasq.warden.test/](https://dnsmasq.warden.test/)
 * [https://webmail.warden.test/](https://webmail.warden.test/)
 * [https://phpmyadmin.warden.test/](https://phpmyadmin.warden.test/)
+* `tunnel.warden.test` (SSH tunnel on port `2222` for connecting database clients — see [Database Connections](https://docs.warden.dev/configuration/database.html))
 
 ## Customizable Settings
 
