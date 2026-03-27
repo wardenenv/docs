@@ -79,7 +79,10 @@ If you are running **Warden inside WSL** and opening sites in **Windows browsers
 
 Some Windows 11 setups may also display a certificate trust confirmation dialog while the root CA is being imported from WSL.
 
-![Windows 11 confirmation dialog when importing the Warden root CA from WSL](configuration/screenshots/win-11-wsl-cert.png)
+```{image} configuration/screenshots/win-11-wsl-cert.png
+:alt: Windows 11 confirmation dialog when importing the Warden root CA from WSL
+:width: 400px
+```
 
 If you are using **Firefox** inside Linux and it warns you the SSL certificate is invalid/untrusted, go to Preferences -> Privacy & Security -> View Certificates (bottom of page) -> Authorities -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
 

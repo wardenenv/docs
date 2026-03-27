@@ -79,16 +79,20 @@ Specify ``127.0.0.1`` as the primary DNS host and any public DNS server as the b
 ![Windows 11 DNS Configuration](screenshots/dns-resolver--win11-interface-dns-settings.png)
 
 :::{warning}
-On some newer Windows 11 systems using WSL2 and Docker Desktop, Hyper-V firewall rules may still prevent Windows DNS requests from reaching Warden's local `dnsmasq` service even after `127.0.0.1` is configured as the primary DNS server.
+On some newer Windows 11 systems using WSL2 and Docker Desktop, host-side networking components such as the Hyper-V firewall and `SharedAccess` (`svchost.exe`) may still prevent Windows DNS requests from reaching Warden's local `dnsmasq` service even after `127.0.0.1` is configured as the primary DNS server. In that situation, Warden DNS may work correctly inside WSL while Windows applications still fail to resolve the same domains.
 :::
 
 If Windows DNS still does not resolve your Warden domains, use one of these workarounds:
 
 1. Add the required domains to the Windows `hosts` file at `C:\Windows\System32\drivers\etc\hosts`.
-2. Launch Chrome with host resolver overrides for local development domains:
+2. Launch Chrome with host resolver overrides for Warden's `.test` domains:
 
 ```text
-"C:\Program Files\Google\Chrome\Application\chrome.exe" --host-resolver-rules="MAP *.test 127.0.0.1, MAP test 127.0.0.1, MAP *.local 127.0.0.1, MAP local 127.0.0.1"
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --host-resolver-rules="MAP *.test 127.0.0.1"
 ```
 
-The Chrome workaround only affects that browser process. Other Windows applications and browsers will still need working DNS resolution or matching `hosts` file entries.
+Chromium documents <a href="https://chromium.googlesource.com/chromium/src/+/main/net/dns/README.md" target="_blank" rel="noopener noreferrer"><code>--host-resolver-rules</code> &#8599;</a> as a request remapping flag that can map hostnames to another hostname, an IP address, or `NOTFOUND`. Chrome will show a warning about the unsupported command-line flag, but the `.test` wildcard resolution itself will still work for that browser session.
+
+![Chrome warning shown when launched with host-resolver-rules on Windows](screenshots/chrome-host-remap.png)
+
+These workarounds are relatively safe because they do not require changing Windows, WSL, or Hyper-V default networking behavior. The Chrome workaround only affects that browser process and does not fix DNS for Windows generally. Other Windows applications and browsers will still need working DNS resolution or matching `hosts` file entries. For more background on WSL networking and Hyper-V firewall behavior, see Microsoft's [WSL networking documentation](https://learn.microsoft.com/en-us/windows/wsl/networking).
