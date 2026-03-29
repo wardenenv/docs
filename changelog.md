@@ -6,6 +6,13 @@
 **Bug Fixes:**
 * `warden install` now automatically trusts the Warden root CA in the Windows CurrentUser Root store when run inside WSL, so Windows browsers can trust local Warden certificates without manual certificate import
 * Expanded Windows / WSL DNS documentation to cover Windows 11 cases where Hyper-V firewall rules prevent DNS resolution from reaching Warden, including `hosts` file and Chrome `--host-resolver-rules` workarounds
+* `warden install` now attempts to import the Warden root CA into the Windows `LocalMachine\Root` store first, falls back to `CurrentUser\Root` when elevation or policy prevents it, and reports both store states via `warden doctor`
+* Warden-issued certificates now publish local CRL/AIA metadata on `http://127.0.0.1/.warden/pki/` so Windows Schannel can validate local HTTPS services such as native DoH
+
+**Enhancements:**
+* Added optional DNS-over-HTTPS support for Windows 11 / WSL workflows via `WARDEN_DNS_OVER_HTTPS_ENABLE=1`, serving `https://doh.warden.test/dns-query` by default
+* Enabling `WARDEN_DNS_OVER_HTTPS_ENABLE=1` now automatically keeps Warden `dnsmasq` enabled for the same global services run because the DoH bridge depends on the existing DNS resolver
+* Enabling `WARDEN_DNS_OVER_HTTPS_ENABLE=1` now starts a `dns-over-https-pki` sidecar that publishes the local CRL/AIA files Windows Schannel uses, without keeping that HTTP publisher active when DoH is disabled
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 
