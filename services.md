@@ -5,6 +5,7 @@ After running `warden svc up` for the first time following installation, the fol
 * [https://traefik.warden.test/](https://traefik.warden.test/)
 * [https://portainer.warden.test/](https://portainer.warden.test/)
 * [https://dnsmasq.warden.test/](https://dnsmasq.warden.test/)
+* [https://doh.warden.test/dns-query](https://doh.warden.test/dns-query) when `WARDEN_DNS_OVER_HTTPS_ENABLE=1`
 * [https://webmail.warden.test/](https://webmail.warden.test/)
 * [https://phpmyadmin.warden.test/](https://phpmyadmin.warden.test/)
 * `tunnel.warden.test` (SSH tunnel on port `2222` for connecting database clients — see [Database Connections](https://docs.warden.dev/configuration/database.html))
@@ -19,6 +20,7 @@ The following options are available (with default values indicated):
 * `WARDEN_RESTART_POLICY=always` may be set to `no` to prevent Docker from restarting these service containers or any other valid [restart policy](https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy) value.
 * `WARDEN_SERVICE_DOMAIN=warden.test` may be set to a domain of your choosing if so desired. Please note that this will not currently change network settings or alter `dnsmasq` configuration. Any TLD other than `test` will require DNS resolution be manually configured.
 * `WARDEN_PHPMYADMIN_ENABLE=1` may be set to `0` to disable the phpMyAdmin global service.
+* `WARDEN_DNS_OVER_HTTPS_ENABLE=0` may be set to `1` to enable a local DNS-over-HTTPS endpoint for Windows 11 / WSL clients at `https://doh.warden.test/dns-query` by default
 
 :::{warning}
 Setting ``TRAEFIK_LISTEN=0.0.0.0`` can be quite useful in some cases, but be aware that causing Traefik to listen for requests publicly poses a security risk when on public WiFi or networks otherwise outside of your control.
