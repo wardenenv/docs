@@ -14,20 +14,22 @@ Installing Warden
 ## Installing via Homebrew
 
 Warden may be installed via [Homebrew](https://brew.sh/) on both macOS and Linux hosts:
-
-    brew install wardenenv/warden/warden
-    warden svc up
+```bash
+ brew install wardenenv/warden/warden
+ warden svc up
+```
 
 ## Alternative Installation
 
 Warden may be installed by cloning the repository to the directory of your choice and adding it to your `$PATH`. This method of installation may be when Homebrew does not already exist on your system or when preparing contributions to the Warden project.
-
-    sudo mkdir /opt/warden
-    sudo chown $(whoami) /opt/warden
-    git clone -b main https://github.com/wardenenv/warden.git /opt/warden
-    echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
-    PATH="/opt/warden/bin:$PATH"
-    warden svc up
+```bash
+ sudo mkdir /opt/warden
+ sudo chown $(whoami) /opt/warden
+ git clone -b main https://github.com/wardenenv/warden.git /opt/warden
+ echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
+ PATH="/opt/warden/bin:$PATH"
+ warden svc up
+```
 
 ## Windows Installation (via WSL2)
 
@@ -35,13 +37,36 @@ Install [WSL2 in Windows](https://learn.microsoft.com/en-us/windows/wsl/install)
 Install Ubuntu 20.04 or other compatible Linux version from the Windows store or [manually download distibutions](https://docs.microsoft.com/en-us/windows/wsl/install-manual).   
 Launch Docker for Windows, make sure that the option for WSL2 integration is set.  
 Launch wsl from your terminal of choice.  
+```bash
+ wsl
+ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+ brew install wardenenv/warden/warden
+ warden svc up
+```
+In order for DNS entries to be resolved either add entries to your Windows `C:\Windows\System32\drivers\etc\hosts` file or add `127.0.0.1` as the first DNS server in your current network adapter in Windows.
 
-        wsl
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        brew install wardenenv/warden/warden
-        warden svc up
+:::{warning}
+On some Windows 11 / WSL2 systems, plain DNS to `127.0.0.1` may not work reliably from Windows. If that happens, prefer the DNS over HTTPS setup described on the {doc}`Automatic DNS Resolution <configuration/dns-resolver>` page.
 
-In order for DNS entries to be resolved either add them to your Windows hosts file or add 127.0.0.1 as the first DNS server in your current network adapter in Windows.
+If you need a quick fallback, open PowerShell as Administrator and run this snippet to add the main Warden global hostnames to the Windows `hosts` file:
+
+```powershell
+$hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
+$entries = @(
+    "127.0.0.1 traefik.warden.test",
+    "127.0.0.1 dnsmasq.warden.test",
+    "127.0.0.1 doh.warden.test",
+    "127.0.0.1 webmail.warden.test"
+)
+
+$existing = Get-Content -Path $hostsPath -ErrorAction SilentlyContinue
+foreach ($entry in $entries) {
+    if ($existing -notcontains $entry) {
+        Add-Content -Path $hostsPath -Value $entry
+    }
+}
+```
+:::
 
 :::{warning}
 **For performance reasons code should be located in the WSL Linux home path or other WSL local path ~/code/projectname NOT the default /mnt/c path mapping.**
@@ -53,7 +78,7 @@ GUI tools for Windows should use the network paths provided by WSL2: `\\wsl$\Ubu
 
 ### Automatic DNS Resolution
 
-On Linux environments, you will need to configure your DNS to resolve `*.test` to `127.0.0.1` or use `/etc/hosts` entries. On Mac OS this configuration is automatic via the BSD per-TLD resolver configuration found at `/etc/resolver/test`. On Windows manual configuration of the network adapter DNS server is required.
+On Linux environments, you will need to configure your DNS to resolve `*.test` to `127.0.0.1` or use `/etc/hosts` entries. On Mac OS this configuration is automatic via the BSD per-TLD resolver configuration found at `/etc/resolver/test`. On Windows manual configuration of the network adapter DNS server is required, though some Windows 11 / WSL setups may still need `hosts` file entries or a browser-level override if Hyper-V firewall rules prevent DNS from reaching Warden.
 
 
 For more information see the configuration page for {doc}`Automatic DNS Resolution <configuration/dns-resolver>`.
@@ -64,10 +89,45 @@ In order to sign SSL certificates that may be trusted by a developer workstation
 
 On MacOS this root CA certificate is automatically added to a users trust settings as can be seen by searching for 'Warden Proxy Local CA' in the Keychain application. This should result in the certificates signed by Warden being trusted by Safari and Chrome automatically. If you use Firefox, you will need to add this CA root to trust settings specific to the Firefox browser per the below.
 
-On Ubuntu/Debian this CA root is copied into `/usr/local/share/ca-certificates` and on Fedora/CentOS (Enterprise Linux) it is copied into `/etc/pki/ca-trust/source/anchors` and then the trust bundle is updated appropriately. For new systems, this typically is all that is needed for the CA root to be trusted on the default Firefox browser, but it may not be trusted by Chrome or Firefox automatically should the browsers have already been launched prior to the installation of Warden (browsers on Linux may and do cache CA bundles)
+On Ubuntu/Debian this CA root is copied into `/usr/local/share/ca-certificates` and on Fedora/CentOS (Enterprise Linux) it is copied into `/etc/pki/ca-trust/source/anchors` and then the trust bundle is updated appropriately. For new systems, this typically is all that is needed for the CA root to be trusted on the default Firefox browser, but it may not be trusted by Chrome or Firefox automatically should the browsers have already been launched prior to the installation of Warden (browsers on Linux may and do cache CA bundles).
+
+When `warden install` is run inside WSL, Warden will also attempt to import the same CA root into the Windows `LocalMachine\Root` certificate store by invoking `powershell.exe` from WSL. If Windows elevation is denied or device policy blocks that store, Warden falls back to `CurrentUser\Root`. This allows Windows browsers and Windows-native networking components such as DNS over HTTPS to trust Warden-issued certificates without a separate manual import step.
+
+If you need to import the certificate manually in Windows, use the same CA file from WSL:
+
+* `\\wsl$\Ubuntu-20.04\home\<USER>\.warden\ssl\rootca\certs\ca.cert.pem`
+
+Then in Windows:
+
+1. Press `Win + R`, then open:
+
+   * `certlm.msc` for `LocalMachine\Root`  
+     Preferred for Windows DoH. See {ref}`windows-doh`.
+   * `certmgr.msc` for `CurrentUser\Root`
+2. Go to `Trusted Root Certification Authorities -> Certificates`.
+   
+   ```{image} configuration/screenshots/windows-certlm-import-certificate.png
+   :alt: Windows certificate console showing the Certificates All Tasks Import action
+   :width: 700px
+   ```
+
+3. Right-click `Certificates`, then choose `All Tasks -> Import...` and select `ca.cert.pem`.
+
+Use `LocalMachine\Root` when possible, especially if you want Windows-native DNS over HTTPS and other system services to trust Warden certificates. Use `CurrentUser\Root` if administrator approval or device policy prevents the machine-wide import.
 
 :::{note}
-If you are using **Firefox** and it warns you the SSL certificate is invalid/untrusted, go to Preferences -> Privacy & Security -> View Certificates (bottom of page) -> Authorities -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
+If you are running **Warden inside WSL** and opening sites in **Windows browsers**, the automatic Windows certificate import performed by `warden install` should usually be sufficient. This behavior has been validated against current Windows builds using Firefox, Chrome, and Edge. If the CA root is regenerated later, run `warden install` again so the updated CA can be imported into Windows. You can also run `warden doctor` to confirm whether the Warden root certificate is present in Windows `LocalMachine Root`, `CurrentUser Root`, or both.
+
+![Warden certificates trusted in Firefox, Chrome, and Edge on Windows 11](configuration/screenshots/windows-11-certs.png)
+
+Some Windows 11 setups may also display a certificate trust confirmation dialog while the root CA is being imported from WSL.
+
+```{image} configuration/screenshots/win-11-wsl-cert.png
+:alt: Windows 11 confirmation dialog when importing the Warden root CA from WSL
+:width: 400px
+```
+
+If you are using **Firefox** inside Linux and it warns you the SSL certificate is invalid/untrusted, go to Preferences -> Privacy & Security -> View Certificates (bottom of page) -> Authorities -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
 
 If you are using **Chrome** or **Chromium** on **Linux** and it warns you the SSL certificate is invalid/untrusted, go to Chrome Settings -> Privacy And Security -> Security -> Manage Certificates -> Local Certificates -> Custom -> Installed By You -> Trusted Certificates -> Import and select ``~/.warden/ssl/rootca/certs/ca.cert.pem`` for import, then reload the page.
 :::
