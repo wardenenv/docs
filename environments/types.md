@@ -1,6 +1,6 @@
 # Environment Types
 
-Warden currently supports eight environment types. These types are passed to `env-init` when configuring a project for local development for the first time. This list of environment types can also be seen by running `warden env-init --help` on your command line. The `docker-compose` configuration used to assemble each environment type can be found in the [environments directory](https://github.com/wardenenv/warden/tree/main/environments) on Github.
+Warden currently supports nine environment types. These types are passed to `env-init` when configuring a project for local development for the first time. This list of environment types can also be seen by running `warden env-init --help` on your command line. The `docker-compose` configuration used to assemble each environment type can be found in the [environments directory](https://github.com/wardenenv/warden/tree/main/environments) on Github.
 
 ## Local
 
@@ -55,6 +55,27 @@ The `magento1` environment type supports development of Magento 1 projects, laun
 * Redis
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
+
+## Maho
+
+The `maho` environment type supports development of [Maho](https://mahocommerce.com) projects, launching containers including:
+
+* Nginx
+* PHP-FPM (8.3+)
+* MariaDB
+
+Maho is intentionally self-contained, so no Redis, Varnish, Elasticsearch or OpenSearch services are launched: caching uses Symfony Cache, sessions are stored on files or database, and catalog search runs on the database's fulltext indexes.
+
+The Nginx webroot is set to the project's `public/` directory. In order to achieve a well performing experience on macOS, files are synced into the container using a Mutagen sync session with the exception of the `var/` directory (cache, logs, sessions and locks), which is excluded from sync.
+
+A new project can be started inside the environment with:
+
+```
+composer create-project mahocommerce/maho-starter .
+./maho install
+```
+
+When running `./maho install` (or the web installer), use `db` as the database host and the `maho` database, username and password defaults.
 
 ## Shopware
 
