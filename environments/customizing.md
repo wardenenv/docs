@@ -1,5 +1,9 @@
 # Customizing An Environment
 
+## Personal Overrides via `.env.local`
+
+Values in a project's `.env.local` file (typically git-ignored) override the same variable set in `.env`. `WARDEN_`, `TRAEFIK_` and `PHP_` prefixed variables are read from it. This is the place for a setting that is specific to one developer's machine and should not be committed, such as a personal `TRAEFIK_PUBLIC_DOMAIN` used with {doc}`../configuration/share`.
+
 ## Version Customization via `.env`
 
 To configure your project with a non-default PHP version, add the following to the project's `.env` file and run `warden env up` to re-create the affected containers:
