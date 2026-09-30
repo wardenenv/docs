@@ -13,7 +13,7 @@ sequenceDiagram
     participant Core as Warden core
     participant CLI as Provider CLI (op / vault)
     participant Compose as Docker Compose
-    participant PHP as php-fpm / php-debug
+    participant PHP as PHP containers
 
     Dev->>Core: warden env up
     Core->>CLI: read secrets
@@ -25,9 +25,10 @@ sequenceDiagram
 ```
 
 - Injection and re-reading happen only on `warden env up`, and never for an environment of type `local`. `warden env start` and `warden env restart` reuse the existing containers, and a container keeps the environment it was created with, so the values are still there; they are just not read from the provider again.
-- Only the `php-fpm` and `php-debug` containers receive the variables.
+- The `php-fpm` and `php-debug` containers always receive the variables. When `WARDEN_PHP_SPX`, `WARDEN_BLACKFIRE` or `WARDEN_MAGENTO2_GRAPHQL_SERVER` is enabled, the matching `php-spx`, `php-blackfire` or `php-graphql` container receives them too.
 - `warden shell` inherits the variables from the running container, so they are available in a shell without extra setup.
 - Every `warden env up` reads the secrets again, so a rotated value arrives on the next `warden env up`.
+- The values are exported into the `docker compose` process, so they are also available for `${VAR}` interpolation in the compose files, including the project's `.warden/warden-env.yml`, on the first and every later `warden env up`.
 
 ## Choosing a provider
 
@@ -52,7 +53,7 @@ flowchart TD
 
 | Mode | Configured by | 1Password side | CLI call | Best for |
 |------|---------------|----------------|----------|----------|
-| Environments | `WARDEN_OP_ENVIRONMENT_ID` | A variable set managed in 1Password | `op environment read` | A variable set a team manages in one place |
+| Environments | `WARDEN_OP_ENVIRONMENT_ID` | A variable set managed in 1Password | `op environment read --no-masking` | A variable set a team manages in one place |
 | Items | a `.env.op` file | Individual fields of existing vault items | `op read` | Picking specific fields from existing items, with the references reviewed in git |
 
 ### Environments
@@ -63,6 +64,8 @@ Add the following to the project's `.env` file:
 WARDEN_SECRETS=1password
 WARDEN_OP_ENVIRONMENT_ID=<environment_id>
 ```
+
+Values are injected as 1Password returns them.
 
 Warden does not read a 1Password credential from the project `.env`. The `op` CLI authenticates on its own, using the signed-in desktop app integration or a session token from `op signin`. On a host signed in to more than one 1Password account, set `WARDEN_OP_ACCOUNT` to the account to read from:
 
@@ -126,24 +129,20 @@ The `jq` command is required alongside the `vault` CLI.
 
 ## Reserved variables
 
-Warden never injects the variables it manages itself, because an external source must not change how the stack is built:
+Warden refuses to inject some names, so a secrets source cannot change how the stack is built. There are two groups.
 
-- `CHOWN_DIR_LIST`
-- `COMPOSER_MEMORY_LIMIT`
-- `COMPOSER_VERSION`
-- `HISTFILE`
-- `NODE_VERSION`
-- `SSH_AUTH_SOCK`
-- `SSH_AUTH_SOCK_PATH_ENV`
-- `XDEBUG_VERSION`
+Managed by Warden: the variables Warden uses to build the stack: `CHOWN_DIR_LIST`, `COMPOSER_MEMORY_LIMIT`, `COMPOSER_VERSION`, `HISTFILE`, `NODE_VERSION`, `SSH_AUTH_SOCK`, `SSH_AUTH_SOCK_PATH_ENV`, `XDEBUG_VERSION`, plus every name under the `WARDEN_`, `TRAEFIK_` or `PHP_` prefixes.
 
-Any key under a `WARDEN_`, `TRAEFIK_` or `PHP_` prefix is also skipped. When a provider returns a reserved name, Warden warns `Variables reserved by Warden were not injected: <names>` and starts the environment without it.
+Would change the host process that runs `docker compose`: `PATH`, `HOME`, `USER`, `LOGNAME`, `SHELL`, `PWD`, `OLDPWD`, `IFS`, `TMPDIR`, `ENV`, `BASH_ENV`, `SHELLOPTS`, `BASHOPTS`, `PS4`, `CDPATH`, `GLOBIGNORE`, `TERM`, `LANG`, plus every name under the `DOCKER_`, `COMPOSE_`, `BUILDKIT_`, `BUILDX_`, `LD_`, `DYLD_`, `BASH_FUNC_`, `LC_`, `OP_`, `VAULT_` or `MUTAGEN_` prefixes.
+
+When a provider returns a reserved name, Warden warns `Variables reserved by Warden were not injected: <names>` and starts the environment without it.
 
 ## Security notes
 
 :::{important}
 - Warden writes no secret values to disk. The temporary compose override holds variable names only, and it is removed when `warden env up` exits.
 - The values are exported only to the `docker compose` process that starts the environment. Once the containers run, the values live in the container environment and are visible to anyone who can run `docker inspect` on the host, exactly like any other compose `environment:` entry, so treat this as central storage and rotation of development secrets, not as container isolation.
+- Names that would steer that `docker compose` process itself, such as `PATH` and the Docker client and loader variables, are refused outright.
 - Provider output is parsed, never evaluated, so a value cannot execute a command on the host.
 - The secrets manager credentials themselves never come from the project `.env`; the provider CLI authenticates on its own.
 - Keep development secrets separate from production ones.
@@ -162,9 +161,10 @@ Every failure below is a warning. `warden env up` still starts the environment; 
 | `Both WARDEN_OP_ENVIRONMENT_ID and .env.op are configured; use one of them. Skipping secret injection.` | A 1Password Environment ID and a `.env.op` file are both present. | Keep one mode and remove the other. |
 | `Set WARDEN_OP_ENVIRONMENT_ID or add a .env.op file with secret references; skipping secret injection.` | Neither 1Password mode is configured. | Set the environment ID, or add `.env.op`. |
 | `Could not read 1Password Environment '<id>' (Environments require 1Password CLI 2.33.0-beta.02 or later); …` / `Could not read 1Password secret reference for <KEY>; …` / `Could not read Vault secret '<mount>/<path>'; …` | The provider CLI is not signed in, lacks permission, or cannot reach the service. | Sign in with the provider CLI, check access, then re-run. |
+| `1Password returned masked values; skipping secret injection.` | The `op` CLI ignored `--no-masking` and returned concealed values, for example an older beta. | Update the 1Password CLI to 2.33.0-beta.02 or later. |
 | `Ignored .env.op lines that are not KEY=op://… references: <line numbers>` | `.env.op` contains lines that are not `KEY=op://…` references. | Fix or remove those lines; they are not injected. |
 | `1Password values with line breaks cannot be injected and were skipped: <names>` | A referenced field's value contains a line break. | Store a single-line value in that field, or inject it another way. |
-| `Variables reserved by Warden were not injected: <names>` | The provider returns one or more names Warden manages itself. | Rename the variable in the secrets manager. |
+| `Variables reserved by Warden were not injected: <names>` | The provider returns one or more names Warden reserves, because they build the stack or steer the `docker compose` process. | Rename the variable in the secrets manager. |
 | `Secrets provider '<provider>' returned no variables; …` / `Secrets provider '<provider>' defines only variables reserved by Warden; …` | The provider returned an empty result, or only reserved names. | Check the environment ID or secret path, and that it holds injectable variables. |
 
 ## Writing a provider
